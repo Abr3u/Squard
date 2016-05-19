@@ -4,6 +4,7 @@ public class Player {
 
 	private String id;
 	private Cell currentPosition;
+	private CellColors color;
 
 	public Player(String id) {
 		this.id = id;
@@ -14,10 +15,18 @@ public class Player {
 	}
 	
 	public Cell getCurrentPosition(){
-		return currentPosition;
+		return this.currentPosition;
+	}
+	
+	public void assignColor(CellColors color){
+		this.color = color;
 	}
 	
 	public String getId(){
-		return id;
+		return this.id;
+	}
+
+	public CellColors getCurrentColor() {
+		return this.color;
 	}
 }
