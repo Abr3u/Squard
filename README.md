@@ -1,4 +1,4 @@
 # Squard
 the best game ever created
 
-http://yuml.me/a870b3a6
+http://yuml.me/45d83ace
