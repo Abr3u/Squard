@@ -7,8 +7,12 @@ public enum BoardPositions {
 		Integer maxL = b.getTotalLines();
 		Integer maxC = b.getTotalColumns();
 		switch (this.name()) {
-		case "BotLeft":
-			return new Cell(0, 0);
+		case "BotRight":
+			return new Cell(0, maxC-1);
+		case "TopLeft":
+			return new Cell(maxL-1, 0);
+		case "TopRight":
+			return new Cell(maxL-1, maxC-1);
 		default:
 			return new Cell(0, 0);
 		}

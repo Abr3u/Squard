@@ -12,4 +12,12 @@ public class Player {
 	public void setCurrentPosition(Cell position){
 		this.currentPosition = position;
 	}
+	
+	public Cell getCurrentPosition(){
+		return currentPosition;
+	}
+	
+	public String getId(){
+		return id;
+	}
 }
