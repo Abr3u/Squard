@@ -2,23 +2,27 @@ package domain;
 
 import exceptions.InvalidBoardDimensionsException;
 import exceptions.InvalidMaxPlayersForMatchException;
+import exceptions.InvalidPlayerIdException;
 import exceptions.MatchFullException;
 import exceptions.NotEnoughPlayersException;
 
 public class Squard {
 
 	public static void main(String[] args) {
+		Player abreu = null;
+		Player alice = null;
+		Player bob = null;
+		Player foo = null;
 		try {
-			Board myBoard = new Board(3, 5);
-		} catch (InvalidBoardDimensionsException e1) {
+			abreu = new Player("abreu");
+			alice = new Player("alice");
+			bob = new Player("bob");
+			foo = new Player("foo");
+		} catch (InvalidPlayerIdException e2) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e2.printStackTrace();
 		}
-
-		Player abreu = new Player("abreu");
-		Player alice = new Player("alice");
-		Player bob = new Player("bob");
-		Player foo = new Player("foo");
+		
 
 		Match example = null;
 		try {
@@ -43,7 +47,7 @@ public class Squard {
 		}
 
 		example.printPlayersCurrentPositions();
-
+		example.printPlayersCurrentColors();
 	}
 
 }

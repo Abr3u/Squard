@@ -2,7 +2,11 @@ package domain;
 
 import java.util.ArrayList;
 
+import org.w3c.dom.UserDataHandler;
+
+import exceptions.CantFindPlayerByIdException;
 import exceptions.InvalidBoardDimensionsException;
+import exceptions.InvalidCellCoordinatesException;
 import exceptions.InvalidMaxPlayersForMatchException;
 import exceptions.MatchFullException;
 import exceptions.NotEnoughPlayersException;
@@ -26,7 +30,7 @@ public class Match {
 		// TODO: remove this later
 		try {
 			this.myBoard = new Board(10, 20);
-		} catch (InvalidBoardDimensionsException e) {
+		} catch (InvalidBoardDimensionsException | InvalidCellCoordinatesException e) {
 			e.printStackTrace();
 		}
 		this.players = new ArrayList<Player>();
@@ -44,6 +48,15 @@ public class Match {
 		return this.myBoard;
 	}
 
+	public Player getPlayerById(String id) throws CantFindPlayerByIdException{
+		for(Player player : players){
+			if(player.getId().equals(id)){
+				return player;
+			}
+		}
+		throw new CantFindPlayerByIdException();
+	}
+	
 	public ArrayList<Player> getPlayers() {
 		return this.players;
 	}
@@ -69,6 +82,7 @@ public class Match {
 	public void addPlayer(Player p) throws MatchFullException {
 		if (players.size() < maxPlayers) {
 			this.players.add(p);
+			p.setCurrentMatch(this);
 		} else {
 			throw new MatchFullException();
 		}

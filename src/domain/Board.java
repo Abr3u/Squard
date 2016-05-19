@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 import exceptions.InvalidBoardDimensionsException;
+import exceptions.InvalidCellCoordinatesException;
 
 public class Board {
 	
@@ -14,7 +15,7 @@ public class Board {
 	
 	private ArrayList<Cell> boardCells;
 	
-	public Board(Integer tLines, Integer tColumns) throws InvalidBoardDimensionsException {
+	public Board(Integer tLines, Integer tColumns) throws InvalidBoardDimensionsException, InvalidCellCoordinatesException {
 		if(!validateBoard(tLines,tColumns)){
 			throw new InvalidBoardDimensionsException();
 		}
@@ -31,7 +32,7 @@ public class Board {
 		return true;
 	}
 
-	private void populateBoard() {
+	private void populateBoard() throws InvalidCellCoordinatesException {
 		int i,j;
 		for(i=0;i<tLines; i++){
 			for(j = 0; j< tColumns; j++){
@@ -51,6 +52,13 @@ public class Board {
 	
 	public Integer getTotalColumns() {
 		return tColumns;
+	}
+	
+	public Boolean validateCell(Cell c){
+		if(c.getLine()>=0 && c.getLine()<tLines && c.getColumn()>=0 && c.getColumn()<tColumns){
+			return true;
+		}
+		return false;
 	}
 	
 }

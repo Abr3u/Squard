@@ -6,6 +6,7 @@ import org.junit.Test;
 import domain.Match;
 import domain.Player;
 import exceptions.InvalidMaxPlayersForMatchException;
+import exceptions.InvalidPlayerIdException;
 import exceptions.MatchFullException;
 import exceptions.NotEnoughPlayersException;
 
@@ -63,7 +64,7 @@ public class TestMatch {
 	}
 
 	@Test
-	public void testAddPlayerSuccess() throws InvalidMaxPlayersForMatchException {
+	public void testAddPlayerSuccess() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException {
 		Match myMatch = new Match(2);
 		try {
 			myMatch.addPlayer(new Player("abreu"));
@@ -74,7 +75,7 @@ public class TestMatch {
 	}
 	
 	@Test
-	public void testAddPlayerMoreThanMax() throws InvalidMaxPlayersForMatchException {
+	public void testAddPlayerMoreThanMax() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException {
 		Match myMatch = new Match(1);
 		try {
 			myMatch.addPlayer(new Player("abreu"));
@@ -85,7 +86,7 @@ public class TestMatch {
 	}
 	
 	@Test
-	public void testAddPlayerBoundaries() throws InvalidMaxPlayersForMatchException {
+	public void testAddPlayerBoundaries() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException {
 		Match myMatch = new Match(1);
 		try {
 			myMatch.addPlayer(new Player("abreu"));
@@ -105,7 +106,7 @@ public class TestMatch {
 	}
 	
 	@Test
-	public void testStartMatchSuccess() throws InvalidMaxPlayersForMatchException, MatchFullException {
+	public void testStartMatchSuccess() throws InvalidMaxPlayersForMatchException, MatchFullException, InvalidPlayerIdException {
 		Match myMatch = new Match(4);
 		myMatch.addPlayer(new Player("abreu"));
 		myMatch.addPlayer(new Player("ricardo"));
@@ -122,7 +123,7 @@ public class TestMatch {
 	}
 	
 	@Test
-	public void testStartMatchNotEnoughPlayers() throws InvalidMaxPlayersForMatchException, MatchFullException {
+	public void testStartMatchNotEnoughPlayers() throws InvalidMaxPlayersForMatchException, MatchFullException, InvalidPlayerIdException {
 		Match myMatch = new Match(2);
 		myMatch.addPlayer(new Player("abreu"));
 		try {

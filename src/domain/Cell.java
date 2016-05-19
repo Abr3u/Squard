@@ -1,12 +1,17 @@
 package domain;
 
+import exceptions.InvalidCellCoordinatesException;
+
 public class Cell {
 
 	private CellColors color; 
 	private Integer line;
 	private Integer column;
 	
-	public Cell(Integer line, Integer column) {
+	public Cell(Integer line, Integer column) throws InvalidCellCoordinatesException {
+		if(line < 0 && column < 0){
+			throw new InvalidCellCoordinatesException();
+		}
 		this.line = line;
 		this.column = column;
 		this.color = CellColors.WHITE;

@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import domain.Board;
 import exceptions.InvalidBoardDimensionsException;
+import exceptions.InvalidCellCoordinatesException;
 
 public class TestBoard {
 	
@@ -13,7 +14,7 @@ public class TestBoard {
 	
 
 	@Test
-	public void testConstructorSuccessNormal(){
+	public void testConstructorSuccessNormal() throws InvalidCellCoordinatesException{
 		Board myBoard = null;
 		try {
 			myBoard = new Board(12, 30);
@@ -27,12 +28,12 @@ public class TestBoard {
 	}
 	
 	@Test
-	public void testConstructorSuccessBoundaries(){
+	public void testConstructorSuccessBoundaries() throws InvalidCellCoordinatesException{
 		testConstructorBoundariesLines();
 		testConstructorBoundariesColumns();
 	}
 	
-	public void testConstructorBoundariesLines() {
+	public void testConstructorBoundariesLines() throws InvalidCellCoordinatesException {
 		Board myBoard = null;
 		try {
 			myBoard = new Board(1,10);
@@ -47,7 +48,7 @@ public class TestBoard {
 		}
 	}
 	
-	public void testConstructorBoundariesColumns() {
+	public void testConstructorBoundariesColumns() throws InvalidCellCoordinatesException {
 		Board myBoard = null;
 		try {
 			myBoard = new Board(10,1);
@@ -64,12 +65,12 @@ public class TestBoard {
 	
 
 	@Test
-	public void testConstructorBadCoordinates(){
+	public void testConstructorBadCoordinates() throws InvalidCellCoordinatesException{
 		testConstructorBadLines();
 		testConstructorBadColumns();		
 	}
 	
-	public void testConstructorBadLines(){
+	public void testConstructorBadLines() throws InvalidCellCoordinatesException{
 		try {
 			new Board(-1, 1);
 			fail();
@@ -82,7 +83,7 @@ public class TestBoard {
 		}
 	}
 	
-	public void testConstructorBadColumns(){
+	public void testConstructorBadColumns() throws InvalidCellCoordinatesException{
 		try {
 			new Board(1, -1);
 			fail();
