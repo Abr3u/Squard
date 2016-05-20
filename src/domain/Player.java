@@ -6,15 +6,15 @@ import exceptions.NotInMatchException;
 
 public class Player {
 
-	private final Integer MAX_ID_LENGTH = 30; 
-	
+	private final Integer MAX_ID_LENGTH = 30;
+
 	private String id;
 	private Cell currentPosition;
-	private CellColors color;
+	private CellColor color;
 	private Match currentMatch;
 
 	public Player(String id) throws InvalidPlayerIdException {
-		if(id == null || id.isEmpty() || id.length()<3 || id.length() > MAX_ID_LENGTH){
+		if (id == null || id.isEmpty() || id.length() < 3 || id.length() > MAX_ID_LENGTH) {
 			throw new InvalidPlayerIdException();
 		}
 		this.id = id;
@@ -32,71 +32,50 @@ public class Player {
 		return this.currentPosition;
 	}
 
-	public void assignColor(CellColors color) {
+	public void assignColor(CellColor color) {
 		this.color = color;
 	}
 
-	public void moveUP() throws NotInMatchException {
-		if(this.currentMatch == null){
+	public void moveUP() throws NotInMatchException, InvalidCellCoordinatesException {
+		if (this.currentMatch == null) {
 			throw new NotInMatchException();
 		}
+
+		Cell newCell = new Cell(currentPosition.getLine() + 1, currentPosition.getColumn());
 		
-		Cell newCell = null;
-		try {
-			newCell = new Cell(currentPosition.getLine()+1, currentPosition.getColumn());
-		} catch (InvalidCellCoordinatesException e) {
-			//this should never happen
-			e.printStackTrace();
-		}
-		if(this.currentMatch.getBoard().validateCell(newCell)){
+		if (this.currentMatch.getBoard().validateCell(newCell)) {
 			this.currentPosition = newCell;
 		}
 	}
 
-	public void moveDOWN() throws NotInMatchException {
-		if(this.currentMatch == null){
+	public void moveDOWN() throws NotInMatchException, InvalidCellCoordinatesException {
+		if (this.currentMatch == null) {
 			throw new NotInMatchException();
 		}
-		Cell newCell = null;
-		try {
-			newCell = new Cell(currentPosition.getLine()-1, currentPosition.getColumn());
-		} catch (InvalidCellCoordinatesException e) {
-			//this should never happen
-			e.printStackTrace();
-		}
-		if(this.currentMatch.getBoard().validateCell(newCell)){
+		Cell newCell =  new Cell(currentPosition.getLine() - 1, currentPosition.getColumn());
+		
+		if (newCell != null && this.currentMatch.getBoard().validateCell(newCell)) {
 			this.currentPosition = newCell;
 		}
 	}
 
-	public void moveLEFT() throws NotInMatchException {
-		if(this.currentMatch == null){
+	public void moveLEFT() throws NotInMatchException, InvalidCellCoordinatesException {
+		if (this.currentMatch == null) {
 			throw new NotInMatchException();
 		}
-		Cell newCell = null;
-		try {
-			newCell = new Cell(currentPosition.getLine(), currentPosition.getColumn()-1);
-		} catch (InvalidCellCoordinatesException e) {
-			//this should never happen
-			e.printStackTrace();
-		}
-		if(this.currentMatch.getBoard().validateCell(newCell)){
+		Cell newCell = new Cell(currentPosition.getLine(), currentPosition.getColumn() - 1);
+		
+		if (this.currentMatch.getBoard().validateCell(newCell)) {
 			this.currentPosition = newCell;
 		}
 	}
 
-	public void moveRIGHT() throws NotInMatchException {
-		if(this.currentMatch == null){
+	public void moveRIGHT() throws NotInMatchException, InvalidCellCoordinatesException {
+		if (this.currentMatch == null) {
 			throw new NotInMatchException();
 		}
-		Cell newCell = null;
-		try {
-			newCell = new Cell(currentPosition.getLine(), currentPosition.getColumn()+1);
-		} catch (InvalidCellCoordinatesException e) {
-			//this should never happen
-			e.printStackTrace();
-		}
-		if(this.currentMatch.getBoard().validateCell(newCell)){
+		Cell newCell = new Cell(currentPosition.getLine(), currentPosition.getColumn() + 1);
+		if (this.currentMatch.getBoard().validateCell(newCell)) {
 			this.currentPosition = newCell;
 		}
 	}
@@ -105,7 +84,7 @@ public class Player {
 		return this.id;
 	}
 
-	public CellColors getCurrentColor() {
+	public CellColor getCurrentColor() {
 		return this.color;
 	}
 }

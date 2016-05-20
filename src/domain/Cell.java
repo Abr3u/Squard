@@ -4,7 +4,7 @@ import exceptions.InvalidCellCoordinatesException;
 
 public class Cell {
 
-	private CellColors color; 
+	private CellColor color; 
 	private Integer line;
 	private Integer column;
 	
@@ -14,10 +14,10 @@ public class Cell {
 		}
 		this.line = line;
 		this.column = column;
-		this.color = CellColors.WHITE;
+		this.color = CellColor.WHITE;
 	}
 	
-	public void changeColor(CellColors newcolor){
+	public void changeColor(CellColor newcolor){
 		this.color = newcolor;
 	}
 	
@@ -33,7 +33,7 @@ public class Cell {
 		return this.column;
 	}
 	
-	public CellColors getColor(){
+	public CellColor getColor(){
 		return this.color;
 	}
 }

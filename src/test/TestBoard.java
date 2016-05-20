@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import domain.Board;
+import domain.BoardType;
 import exceptions.InvalidBoardDimensionsException;
 import exceptions.InvalidCellCoordinatesException;
 
@@ -17,13 +18,13 @@ public class TestBoard {
 	public void testConstructorSuccessNormal() throws InvalidCellCoordinatesException{
 		Board myBoard = null;
 		try {
-			myBoard = new Board(12, 30);
+			myBoard = new Board(BoardType.MEDIUM);
 		} catch (InvalidBoardDimensionsException e) {
 			fail();
 		}
-		assertTrue(myBoard.getTotalLines()==12);
-		assertTrue(myBoard.getTotalColumns()==30);
-		assertTrue(myBoard.getBoardCells().size()==30*12);
+		assertTrue(myBoard.getTotalLines()==30);
+		assertTrue(myBoard.getTotalColumns()==50);
+		assertTrue(myBoard.getBoardCells().size()==30*50);
 		
 	}
 	

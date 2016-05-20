@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import domain.Board;
 import domain.Cell;
-import domain.CellColors;
+import domain.CellColor;
 import exceptions.InvalidBoardDimensionsException;
 import exceptions.InvalidCellCoordinatesException;
 
@@ -21,7 +21,7 @@ public class TestCell {
 		}
 		assertTrue(cell.getLine()==2);
 		assertTrue(cell.getColumn()==3);
-		assertTrue(cell.getColor()==CellColors.WHITE);
+		assertTrue(cell.getColor()==CellColor.WHITE);
 		assertEquals(""+2+"#"+3, cell.toString());
 	}
 	
@@ -46,7 +46,7 @@ public class TestCell {
 	@Test
 	public void testChangeColor() throws InvalidCellCoordinatesException{
 		Cell cell = new Cell(4, 0);
-		cell.changeColor(CellColors.BLUE);
-		assertSame(CellColors.BLUE,cell.getColor());
+		cell.changeColor(CellColor.BLUE);
+		assertSame(CellColor.BLUE,cell.getColor());
 	}
 }

@@ -10,26 +10,49 @@ import exceptions.InvalidCellCoordinatesException;
 import exceptions.InvalidMaxPlayersForMatchException;
 import exceptions.MatchFullException;
 import exceptions.NotEnoughPlayersException;
+import exceptions.NotInMatchException;
 
 public class Match {
 
-	private Integer MAX_PLAYERS = 4;
+	private final Integer MAX_PLAYERS = 4;
 
-	private Boolean started;
-	private Board myBoard;
+	private Integer id;
 	private Integer maxPlayers;
+	private MatchState state;
+	private BoardType boardType;
+	private Board myBoard;
 	private ArrayList<Player> players;
 
-	public Match(Integer maxPlayers) throws InvalidMaxPlayersForMatchException {
+	public Match(Integer id, Integer maxPlayers) throws InvalidMaxPlayersForMatchException {
 		if (maxPlayers < 1 || maxPlayers > MAX_PLAYERS) {
 			throw new InvalidMaxPlayersForMatchException();
 		}
 
-		this.started = false;
+		this.id = id;
+		this.state = MatchState.CREATED;
+		this.boardType = BoardType.MEDIUM;
 		this.maxPlayers = maxPlayers;
 		// TODO: remove this later
 		try {
-			this.myBoard = new Board(10, 20);
+			this.myBoard = new Board(boardType);
+		} catch (InvalidBoardDimensionsException | InvalidCellCoordinatesException e) {
+			e.printStackTrace();
+		}
+		this.players = new ArrayList<Player>();
+	}
+
+	public Match(Integer id, Integer maxPlayers, BoardType type) throws InvalidMaxPlayersForMatchException {
+		if (maxPlayers < 1 || maxPlayers > MAX_PLAYERS) {
+			throw new InvalidMaxPlayersForMatchException();
+		}
+
+		this.id = id;
+		this.state = MatchState.CREATED;
+		this.boardType = type;
+		this.maxPlayers = maxPlayers;
+		// TODO: remove this later
+		try {
+			this.myBoard = new Board(boardType);
 		} catch (InvalidBoardDimensionsException | InvalidCellCoordinatesException e) {
 			e.printStackTrace();
 		}
@@ -40,23 +63,27 @@ public class Match {
 		return this.maxPlayers;
 	}
 
-	public Boolean hasStarted(){
-		return this.started;
-	}
-	
 	public Board getBoard() {
 		return this.myBoard;
 	}
 
-	public Player getPlayerById(String id) throws CantFindPlayerByIdException{
-		for(Player player : players){
-			if(player.getId().equals(id)){
+	public Integer getId() {
+		return this.id;
+	}
+
+	public MatchState getState() {
+		return this.state;
+	}
+
+	public Player getPlayerById(String id) throws CantFindPlayerByIdException {
+		for (Player player : players) {
+			if (player.getId().equals(id)) {
 				return player;
 			}
 		}
 		throw new CantFindPlayerByIdException();
 	}
-	
+
 	public ArrayList<Player> getPlayers() {
 		return this.players;
 	}
@@ -88,11 +115,11 @@ public class Match {
 		}
 	}
 
-	public void startMatch() throws NotEnoughPlayersException {
+	public void start() throws NotEnoughPlayersException {
 		if (players.size() < maxPlayers) {
 			throw new NotEnoughPlayersException();
 		}
-		started = true;
+		state = MatchState.ONGOING;
 		setupInitialBoardState();
 	}
 
@@ -103,9 +130,9 @@ public class Match {
 
 	private void assignPlayersColors() {
 		int i;
-		for (i = 0; i < players.size();i++) {
-				players.get(i).assignColor(CellColors.values()[i+1]);
-			}
+		for (i = 0; i < players.size(); i++) {
+			players.get(i).assignColor(CellColor.values()[i + 1]);
+		}
 	}
 
 	private void distributePlayersPositions() {
@@ -113,5 +140,50 @@ public class Match {
 		for (i = 0; i < players.size(); i++) {
 			players.get(i).setCurrentPosition(BoardPositions.values()[i].toCell(myBoard));
 		}
+	}
+
+	public void movePlayer(int i, Direction up) {
+		switch (up.name()) {
+		case "UP":
+			try {
+				players.get(i).moveUP();
+			} catch (NotInMatchException e) {
+				//this should never happen
+			} catch (InvalidCellCoordinatesException e) {
+				e.printStackTrace();
+			}
+			break;
+		case "DOWN":
+			try {
+				players.get(i).moveDOWN();
+			} catch (NotInMatchException e) {
+				//this should never happen
+			} catch (InvalidCellCoordinatesException e) {
+				e.printStackTrace();
+			}
+			break;
+		case "RIGHT":
+			try {
+				players.get(i).moveRIGHT();
+			} catch (NotInMatchException e) {
+				//this should never happen
+			} catch (InvalidCellCoordinatesException e) {
+				e.printStackTrace();
+			}
+			break;
+		case "LEFT":
+			try {
+				players.get(i).moveLEFT();
+			} catch (NotInMatchException e) {
+				//this should never happen
+			} catch (InvalidCellCoordinatesException e) {
+				e.printStackTrace();
+			}
+			break;
+		}
+	}
+
+	public void printPlayerCurrentPositions(int i) {
+		System.out.println(players.get(i).getId() + " -> " + players.get(i).getCurrentPosition().toString());
 	}
 }

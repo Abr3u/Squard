@@ -1,6 +1,6 @@
 package domain;
 
-public enum CellColors {
+public enum CellColor {
 	WHITE,
 	YELLOW,
 	RED,
