@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.ArrayList;
+
 import exceptions.InvalidCellCoordinatesException;
 
 public enum BoardType {
@@ -8,9 +10,8 @@ public enum BoardType {
 	public void populateBoard(Board b) {
 		switch (this.name()) {
 		case "SMALL":
-			fillBoardCellsByDimensions(b, 10, 20);
+			fillBoardCellsByDimensions(b, 3, 5);
 			break;
-
 		case "LARGE":
 			fillBoardCellsByDimensions(b, 70, 100);
 			break;
@@ -29,7 +30,6 @@ public enum BoardType {
 					newCell = new Cell(i, j);
 				} catch (InvalidCellCoordinatesException e) {
 					e.printStackTrace();
-					return;
 				}
 				board.getBoardCells().add(newCell);
 			}
@@ -39,7 +39,7 @@ public enum BoardType {
 	public Integer getTotalLines() {
 		switch (this.name()) {
 		case "SMALL":
-			return 10;
+			return 3;
 
 		case "LARGE":
 			return 70;
@@ -52,7 +52,7 @@ public enum BoardType {
 	public Integer getTotalColumns() {
 		switch (this.name()) {
 		case "SMALL":
-			return 20;
+			return 5;
 
 		case "LARGE":
 			return 100;

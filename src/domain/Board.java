@@ -1,6 +1,5 @@
 package domain;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 
 import exceptions.InvalidBoardDimensionsException;
@@ -21,7 +20,6 @@ public class Board {
 		l = type.getTotalLines();
 		c = type.getTotalColumns();
 		
-		
 		if(!validateBoard(l,c)){
 			throw new InvalidBoardDimensionsException();
 		}
@@ -29,6 +27,7 @@ public class Board {
 		this.tLines = l;
 		this.tColumns = c;
 		this.boardCells = new ArrayList<Cell>();
+		myType.populateBoard(this);
 	}
 
 	public Board(Integer l, Integer c) throws InvalidBoardDimensionsException{
@@ -36,6 +35,14 @@ public class Board {
 		if(!validateBoard(l,c)){
 			throw new InvalidBoardDimensionsException();
 		}
+	}
+	
+	public Cell getCellByCoordinates(Integer l, Integer c) throws InvalidCellCoordinatesException{
+		int index = l*getTotalColumns()+c ;
+		if(l < 0 || c <0 || l>MAX_LINES || c > MAX_COLUMNS || index > boardCells.size()-1){
+			throw new InvalidCellCoordinatesException();
+		}
+		return this.boardCells.get(l*getTotalColumns()+c);
 	}
 	
 	private boolean validateBoard(Integer lines, Integer columns) {

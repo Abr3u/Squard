@@ -2,6 +2,8 @@ package domain;
 
 import java.util.ArrayList;
 
+import javax.activation.UnsupportedDataTypeException;
+
 import org.w3c.dom.UserDataHandler;
 
 import exceptions.CantFindPlayerByIdException;
@@ -11,6 +13,7 @@ import exceptions.InvalidMaxPlayersForMatchException;
 import exceptions.MatchFullException;
 import exceptions.NotEnoughPlayersException;
 import exceptions.NotInMatchException;
+import exceptions.PlayerAlreadyInMatchException;
 
 public class Match {
 
@@ -20,6 +23,7 @@ public class Match {
 	private Integer maxPlayers;
 	private MatchState state;
 	private BoardType boardType;
+	private MatchThread myThread;
 	private Board myBoard;
 	private ArrayList<Player> players;
 
@@ -32,7 +36,7 @@ public class Match {
 		this.state = MatchState.CREATED;
 		this.boardType = BoardType.MEDIUM;
 		this.maxPlayers = maxPlayers;
-		// TODO: remove this later
+		
 		try {
 			this.myBoard = new Board(boardType);
 		} catch (InvalidBoardDimensionsException | InvalidCellCoordinatesException e) {
@@ -50,7 +54,7 @@ public class Match {
 		this.state = MatchState.CREATED;
 		this.boardType = type;
 		this.maxPlayers = maxPlayers;
-		// TODO: remove this later
+		
 		try {
 			this.myBoard = new Board(boardType);
 		} catch (InvalidBoardDimensionsException | InvalidCellCoordinatesException e) {
@@ -106,7 +110,17 @@ public class Match {
 		}
 	}
 
-	public void addPlayer(Player p) throws MatchFullException {
+	public void printPlayerCurrentPositions(int i) {
+		System.out.println(players.get(i).getId() + " -> " + players.get(i).getCurrentPosition().toString());
+	}
+	
+	public void printBoard(){
+		for(Cell cell : myBoard.getBoardCells()){
+			System.out.println(cell.toString());
+		}
+	}
+	
+	public void addPlayer(Player p) throws MatchFullException, PlayerAlreadyInMatchException {
 		if (players.size() < maxPlayers) {
 			this.players.add(p);
 			p.setCurrentMatch(this);
@@ -121,6 +135,7 @@ public class Match {
 		}
 		state = MatchState.ONGOING;
 		setupInitialBoardState();
+		myThread = new MatchThread(myBoard);
 	}
 
 	private void setupInitialBoardState() {
@@ -149,8 +164,6 @@ public class Match {
 				players.get(i).moveUP();
 			} catch (NotInMatchException e) {
 				//this should never happen
-			} catch (InvalidCellCoordinatesException e) {
-				e.printStackTrace();
 			}
 			break;
 		case "DOWN":
@@ -158,17 +171,13 @@ public class Match {
 				players.get(i).moveDOWN();
 			} catch (NotInMatchException e) {
 				//this should never happen
-			} catch (InvalidCellCoordinatesException e) {
-				e.printStackTrace();
-			}
+			} 
 			break;
 		case "RIGHT":
 			try {
 				players.get(i).moveRIGHT();
 			} catch (NotInMatchException e) {
 				//this should never happen
-			} catch (InvalidCellCoordinatesException e) {
-				e.printStackTrace();
 			}
 			break;
 		case "LEFT":
@@ -176,14 +185,42 @@ public class Match {
 				players.get(i).moveLEFT();
 			} catch (NotInMatchException e) {
 				//this should never happen
-			} catch (InvalidCellCoordinatesException e) {
-				e.printStackTrace();
 			}
 			break;
 		}
 	}
 
-	public void printPlayerCurrentPositions(int i) {
-		System.out.println(players.get(i).getId() + " -> " + players.get(i).getCurrentPosition().toString());
+
+	public void end() {
+		for(Player p:players){
+			try {
+				p.setCurrentMatch(null);
+			} catch (PlayerAlreadyInMatchException e) {
+				//this should never happen
+				e.printStackTrace();
+			}
+		}
+		this.state=MatchState.FINISHED;
+		this.myBoard = null;
+		this.myThread = null;
+	}
+	
+	final class MatchThread implements Runnable{
+		
+		private Board board;
+		
+		public MatchThread(Board b) {
+			this.board = b;
+		}
+
+		public void run() {
+			while(!Thread.currentThread().isInterrupted()){
+				while(!state.equals(MatchState.FINISHED)){
+					//wait events
+					//update
+					//draw
+				}
+			}
+		}
 	}
 }

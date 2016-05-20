@@ -16,6 +16,7 @@ import exceptions.InvalidPlayerIdException;
 import exceptions.MatchFullException;
 import exceptions.NotEnoughPlayersException;
 import exceptions.NotInMatchException;
+import exceptions.PlayerAlreadyInMatchException;
 
 public class TestPlayer {
 	
@@ -57,12 +58,10 @@ public class TestPlayer {
 			player.moveDOWN();
 			fail();
 		} catch (NotInMatchException e) {
-		} catch (InvalidCellCoordinatesException e) {
-			fail();
 		}
 	}
 	
-	private Match setupMovementTests() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException, MatchFullException, NotEnoughPlayersException{
+	private Match setupMovementTests() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException, MatchFullException, NotEnoughPlayersException, PlayerAlreadyInMatchException{
 		Match myMatch = new Match(1,4);
 		Player abreu = new Player("abreu");
 		Player alice = new Player("alice");
@@ -77,7 +76,7 @@ public class TestPlayer {
 	}
 	
 	@Test
-	public void testMoveUp() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException, MatchFullException, NotEnoughPlayersException, CantFindPlayerByIdException{
+	public void testMoveUp() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException, MatchFullException, NotEnoughPlayersException, CantFindPlayerByIdException, PlayerAlreadyInMatchException{
 		Match match = setupMovementTests();
 		testMoveUpPossible(match);
 		testMoveUpImpossible(match);
@@ -91,8 +90,6 @@ public class TestPlayer {
 		try {
 			abreu.moveUP();
 		} catch (NotInMatchException e) {
-			fail();
-		} catch (InvalidCellCoordinatesException e) {
 			fail();
 		}
 		assertTrue(prevPosition.getLine()+1 == abreu.getCurrentPosition().getLine());
@@ -109,8 +106,6 @@ public class TestPlayer {
 			bob.moveUP();
 		} catch (NotInMatchException e) {
 			fail();
-		} catch (InvalidCellCoordinatesException e) {
-			fail();
 		}
 		assertTrue(prevPosition.getLine() == bob.getCurrentPosition().getLine());
 		assertTrue(prevPosition.getColumn() == bob.getCurrentPosition().getColumn());
@@ -118,7 +113,7 @@ public class TestPlayer {
 	}
 	
 	@Test
-	public void testMoveDown() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException, MatchFullException, NotEnoughPlayersException, CantFindPlayerByIdException{
+	public void testMoveDown() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException, MatchFullException, NotEnoughPlayersException, CantFindPlayerByIdException, PlayerAlreadyInMatchException{
 		Match match = setupMovementTests();
 		testMoveDownPossible(match);
 		testMoveDownImpossible(match);
@@ -132,8 +127,6 @@ public class TestPlayer {
 		try {
 			bob.moveDOWN();
 		} catch (NotInMatchException e) {
-			fail();
-		} catch (InvalidCellCoordinatesException e) {
 			fail();
 		}
 		assertTrue(prevPosition.getLine()-1 == bob.getCurrentPosition().getLine());
@@ -150,7 +143,6 @@ public class TestPlayer {
 			abreu.moveDOWN();
 		} catch (NotInMatchException e) {
 			fail();
-		} catch (InvalidCellCoordinatesException e) {
 		}
 		assertTrue(prevPosition.getLine() == abreu.getCurrentPosition().getLine());
 		assertTrue(prevPosition.getColumn() == abreu.getCurrentPosition().getColumn());
@@ -158,7 +150,7 @@ public class TestPlayer {
 	}
 	
 	@Test
-	public void testMoveRight() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException, MatchFullException, NotEnoughPlayersException, CantFindPlayerByIdException{
+	public void testMoveRight() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException, MatchFullException, NotEnoughPlayersException, CantFindPlayerByIdException, PlayerAlreadyInMatchException{
 		Match match = setupMovementTests();
 		testMoveRightPossible(match);
 		testMoveRightImpossible(match);
@@ -172,8 +164,6 @@ public class TestPlayer {
 		try {
 			bob.moveRIGHT();
 		} catch (NotInMatchException e) {
-			fail();
-		} catch (InvalidCellCoordinatesException e) {
 			fail();
 		}
 		assertTrue(prevPosition.getColumn() +1 == bob.getCurrentPosition().getColumn());
@@ -190,15 +180,13 @@ public class TestPlayer {
 			alice.moveRIGHT();
 		} catch (NotInMatchException e) {
 			fail();
-		} catch (InvalidCellCoordinatesException e) {
-			fail();
 		}
 		assertTrue(prevPosition.getColumn() == alice.getCurrentPosition().getColumn());	
 		assertTrue(prevPosition.getLine() == alice.getCurrentPosition().getLine());
 	}
 	
 	@Test
-	public void testMoveLEFT() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException, MatchFullException, NotEnoughPlayersException, CantFindPlayerByIdException{
+	public void testMoveLEFT() throws InvalidMaxPlayersForMatchException, InvalidPlayerIdException, MatchFullException, NotEnoughPlayersException, CantFindPlayerByIdException, PlayerAlreadyInMatchException{
 		Match match = setupMovementTests();
 		testMoveLeftPossible(match);
 		testMoveLeftImpossible(match);
@@ -212,8 +200,6 @@ public class TestPlayer {
 		try {
 			alice.moveLEFT();
 		} catch (NotInMatchException e) {
-			fail();
-		} catch (InvalidCellCoordinatesException e) {
 			fail();
 		}
 		assertTrue(prevPosition.getColumn()-1 == alice.getCurrentPosition().getColumn());
@@ -230,7 +216,6 @@ public class TestPlayer {
 			abreu.moveLEFT();
 		} catch (NotInMatchException e) {
 			fail();
-		} catch (InvalidCellCoordinatesException e) {
 		}
 		assertTrue(prevPosition.getLine() == abreu.getCurrentPosition().getLine());
 		assertTrue(prevPosition.getColumn() == abreu.getCurrentPosition().getColumn());

@@ -22,7 +22,7 @@ public class Cell {
 	}
 	
 	public String toString(){
-		return ""+line+"#"+column;
+		return "["+line+"#"+column+"] -> "+color;
 	}
 	
 	public Integer getLine(){

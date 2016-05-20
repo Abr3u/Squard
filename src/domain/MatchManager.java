@@ -6,6 +6,7 @@ import exceptions.CantFindMatchByIdException;
 import exceptions.InvalidMaxPlayersForMatchException;
 import exceptions.MatchFullException;
 import exceptions.NotEnoughPlayersException;
+import exceptions.PlayerAlreadyInMatchException;
 
 public class MatchManager {
 	
@@ -73,6 +74,7 @@ public class MatchManager {
 	}
 	
 	public void endMatchById(Integer id){
+		getMatchById(id).end();
 		myMatches.remove(id);
 	}
 
@@ -87,6 +89,8 @@ public class MatchManager {
 		try {
 			getMatchById(mID).addPlayer(abreu);
 		} catch (MatchFullException e) {
+			e.printStackTrace();
+		} catch (PlayerAlreadyInMatchException e) {
 			e.printStackTrace();
 		}
 	}

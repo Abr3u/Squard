@@ -29,9 +29,9 @@ public class Squard {
 		matchManager.startMatchById(mID);
 		
 		Match myMatch = matchManager.getMatchById(mID);
-		myMatch.printPlayersCurrentPositions();
-		myMatch.printPlayersCurrentColors();
-		
+		myMatch.movePlayer(0, Direction.LEFT);
+//		myMatch.movePlayer(0, Direction.LEFT);
+		myMatch.printBoard();
 		matchManager.endMatchById(mID);
 		
 	}

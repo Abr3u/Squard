@@ -13,6 +13,7 @@ import exceptions.InvalidMaxPlayersForMatchException;
 import exceptions.InvalidPlayerIdException;
 import exceptions.MatchFullException;
 import exceptions.NotEnoughPlayersException;
+import exceptions.PlayerAlreadyInMatchException;
 
 public class TestMatch {
 
@@ -80,6 +81,8 @@ public class TestMatch {
 			myMatch.addPlayer(new Player("abreu"));
 		} catch (MatchFullException e) {
 			fail();
+		} catch (PlayerAlreadyInMatchException e) {
+			fail();
 		}
 		assertTrue(myMatch.getPlayers().size() == 1);
 	}
@@ -92,6 +95,8 @@ public class TestMatch {
 			myMatch.addPlayer(new Player("ricardo"));
 			fail();
 		} catch (MatchFullException e) {
+		} catch (PlayerAlreadyInMatchException e) {
+			fail();
 		}
 	}
 	
@@ -101,6 +106,8 @@ public class TestMatch {
 		try {
 			myMatch.addPlayer(new Player("abreu"));
 		} catch (MatchFullException e) {
+			fail();
+		} catch (PlayerAlreadyInMatchException e) {
 			fail();
 		}
 		
@@ -112,19 +119,23 @@ public class TestMatch {
 			myMatch.addPlayer(new Player("bob"));
 		} catch (MatchFullException e) {
 			fail();
+		}catch (PlayerAlreadyInMatchException e) {
+			fail();
 		}
 	}
 	
 	@Test
 	public void testStartMatchSuccess() throws InvalidMaxPlayersForMatchException, MatchFullException, InvalidPlayerIdException {
 		Match myMatch = new Match(count++,4);
+		try{
 		myMatch.addPlayer(new Player("abreu"));
 		myMatch.addPlayer(new Player("ricardo"));
 		myMatch.addPlayer(new Player("alice"));
 		myMatch.addPlayer(new Player("bob"));
-		try {
 			myMatch.start();
 		} catch (NotEnoughPlayersException e) {
+			fail();
+		}catch (PlayerAlreadyInMatchException e) {
 			fail();
 		}
 		assertTrue(myMatch.getState().equals(MatchState.ONGOING));
@@ -135,11 +146,13 @@ public class TestMatch {
 	@Test
 	public void testStartMatchNotEnoughPlayers() throws InvalidMaxPlayersForMatchException, MatchFullException, InvalidPlayerIdException {
 		Match myMatch = new Match(count++,2);
+		try{
 		myMatch.addPlayer(new Player("abreu"));
-		try {
 			myMatch.start();
 			fail();
 		} catch (NotEnoughPlayersException e) {
+		}catch (PlayerAlreadyInMatchException e) {
+			fail();
 		}
 	}
 	
