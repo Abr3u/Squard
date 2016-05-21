@@ -10,7 +10,7 @@ public enum BoardType {
 	public void populateBoard(Board b) {
 		switch (this.name()) {
 		case "SMALL":
-			fillBoardCellsByDimensions(b, 3, 5);
+			fillBoardCellsByDimensions(b, 5, 5);
 			break;
 		case "LARGE":
 			fillBoardCellsByDimensions(b, 70, 100);
@@ -39,7 +39,7 @@ public enum BoardType {
 	public Integer getTotalLines() {
 		switch (this.name()) {
 		case "SMALL":
-			return 3;
+			return 5;
 
 		case "LARGE":
 			return 70;

@@ -39,7 +39,7 @@ public class Board {
 	
 	public Cell getCellByCoordinates(Integer l, Integer c) throws InvalidCellCoordinatesException{
 		int index = l*getTotalColumns()+c ;
-		if(l < 0 || c <0 || l>MAX_LINES || c > MAX_COLUMNS || index > boardCells.size()-1){
+		if(l < 0 || c <0 || l>=MAX_LINES || c >= MAX_COLUMNS || index > boardCells.size()-1){
 			throw new InvalidCellCoordinatesException();
 		}
 		return this.boardCells.get(l*getTotalColumns()+c);
