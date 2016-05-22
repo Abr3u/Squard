@@ -2,6 +2,7 @@ package domain;
 
 import org.junit.validator.PublicClassValidator;
 
+import exceptions.InvalidCellCoordinatesException;
 import exceptions.InvalidPlayerIdException;
 import javafx.application.Application;
 import javafx.scene.input.KeyCode;
@@ -31,7 +32,7 @@ public class Squard extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		
-		primaryStage.setTitle("Hello World");
+		primaryStage.setTitle("Squard");
         Group root = new Group();
         Scene scene = new Scene(root, 300, 250, Color.LIGHTGREEN);
         primaryStage.setScene(scene);
@@ -57,6 +58,7 @@ public class Squard extends Application {
 		matchManager.addPlayerToMatch(alice, mID);
 		matchManager.addPlayerToMatch(bob, mID);
 		matchManager.addPlayerToMatch(foo, mID);
+		
 		matchManager.startMatchById(mID);
 	}
 	
@@ -90,6 +92,12 @@ public class Squard extends Application {
 		matchManager.startMatchById(mID);
 
 		Match myMatch = matchManager.getMatchById(mID);
+		try {
+			System.out.println("5;5 "+myMatch.getBoard().getCellByCoordinates(5, 5).getLine()+"#"+myMatch.getBoard().getCellByCoordinates(5, 5).getColumn());
+		} catch (InvalidCellCoordinatesException e) {
+			e.printStackTrace();
+		}
+		
 		myMatch.movePlayer(0, Direction.LEFT);
 		// myMatch.movePlayer(0, Direction.LEFT);
 		myMatch.printBoard();

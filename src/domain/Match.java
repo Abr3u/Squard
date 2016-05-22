@@ -40,6 +40,7 @@ public class Match {
 	private ArrayList<Player> players;
 	private HashMap<Player, Integer> player_score;
 	private Stage myStage;
+	private Canvas myCanvas;
 
 	public Match(Integer id, Integer maxPlayers) throws InvalidMaxPlayersForMatchException {
 		if (maxPlayers < 1 || maxPlayers > MAX_PLAYERS) {
@@ -134,6 +135,11 @@ public class Match {
 		}
 	}
 
+	/* -------------------------
+	 * ---------LOGIC
+	   -------------------------*/
+	
+	
 	public void addPlayer(Player p) throws MatchFullException, PlayerAlreadyInMatchException {
 		if (players.size() < maxPlayers) {
 			this.players.add(p);
@@ -148,77 +154,26 @@ public class Match {
 			throw new NotEnoughPlayersException();
 		}
 		state = MatchState.ONGOING;
-		myStage = new Stage();
+		myStage = new Stage();		
+		myCanvas = getNewCanvas();
+		
 		populateScoreBoard();
 		setupInitialBoardState();
 		drawInitialBoard();
 	}
 
 	private void drawInitialBoard() {
-		int lines, columns;
-		lines = myBoard.getTotalLines();
-		columns = myBoard.getTotalColumns();
-
-		int canvasL = lines * RATIO;
-		int canvasC = columns * RATIO;
-		Group group = new Group();
-		Canvas canvas = new Canvas(canvasL, canvasC);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
+		int lines = myBoard.getTotalLines();
+		int columns = myBoard.getTotalColumns();
 		
-		drawBoardCells(gc, lines, columns, RATIO);
+		GraphicsContext gc = myCanvas.getGraphicsContext2D();
+		Group group = new Group();
+		
+		drawBoardCells(gc,  lines, columns, RATIO);
 		drawPlayersOnBoard(gc,lines,columns,RATIO);
-		group.getChildren().add(canvas);
+		group.getChildren().add(myCanvas);
 
-		updateMyStage(group, canvasL, canvasC);
-	}
-
-	private void updateMyStage(Group group, int canvasl, int canvasc) {
-		Scene myScene = new Scene(group, canvasl, canvasc);
-		myScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent event) {
-				keyPressed(event);
-			}
-
-		});
-		myStage.setScene(myScene);
-		myStage.show();
-	}
-
-	private void drawPlayersOnBoard(GraphicsContext gc, int lines, int columns, int ratio) {
-		for(Player player : players){
-			switch(player.getCurrentColor().name()){
-			case "RED":
-				gc.setFill(Color.RED);
-				break;
-			case "BLUE":
-				gc.setFill(Color.BLUE);
-				break;
-			case "YELLOW":
-				gc.setFill(Color.YELLOW);
-				break;
-			case "GREEN":
-				gc.setFill(Color.GREEN);
-				break;
-			}
-			gc.fillRect(player.getCurrentPosition().getLine() * ratio,
-					player.getCurrentPosition().getColumn() * ratio, ratio, ratio);
-		}
-	}
-
-	private void drawBoardCells(GraphicsContext gc, int lines, int columns, int ratio) {
-		int i, j;
-		for (i = 0; i < lines; i++) {
-			for (j = 0; j < columns; j++) {
-				gc.strokeRect(i * ratio, j * ratio, ratio, ratio);
-			}
-		}
-	}
-
-	public void keyPressed(KeyEvent e) {
-		KeyCode keyCode = e.getCode();
-		System.out.println("key -> " + keyCode);
+		updateMyStage(group, lines*RATIO, columns*RATIO);
 	}
 
 	private void populateScoreBoard() {
@@ -247,39 +202,47 @@ public class Match {
 		}
 	}
 
-	public void movePlayer(int i, Direction up) {
-		switch (up.name()) {
+	public void movePlayer(int i, Direction dir) {
+		switch (dir.name()) {
 		case "UP":
 			try {
-				players.get(i).moveUP();
+				Player p=players.get(i);
+				p.moveUP();
+				updatePlayerPositionStage(p);
 			} catch (NotInMatchException e) {
 				// this should never happen
 			}
 			break;
 		case "DOWN":
 			try {
-				players.get(i).moveDOWN();
+				Player p=players.get(i);
+				p.moveDOWN();
+				updatePlayerPositionStage(p);
 			} catch (NotInMatchException e) {
 				// this should never happen
 			}
 			break;
 		case "RIGHT":
 			try {
-				players.get(i).moveRIGHT();
+				Player p=players.get(i);
+				p.moveRIGHT();
+				updatePlayerPositionStage(p);
 			} catch (NotInMatchException e) {
 				// this should never happen
 			}
 			break;
 		case "LEFT":
 			try {
-				players.get(i).moveLEFT();
+				Player p=players.get(i);
+				p.moveLEFT();
+				updatePlayerPositionStage(p);
 			} catch (NotInMatchException e) {
 				// this should never happen
 			}
 			break;
 		}
 	}
-
+	
 	public void end() {
 		for (Player p : players) {
 			try {
@@ -291,6 +254,93 @@ public class Match {
 		}
 		this.state = MatchState.FINISHED;
 		this.myBoard = null;
+	}
+	
+	/* -------------------------
+	 * --------------JAVAFX
+	   --------------------*/
+	
+	private Canvas getNewCanvas() {
+		return new Canvas(myBoard.getTotalLines()*RATIO, myBoard.getTotalColumns()*RATIO);
+	}
+
+	private void updateMyStage(Group group, int canvasl, int canvasc) {
+		Scene myScene = new Scene(group, canvasl, canvasc);
+		myScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				keyPressed(event);
+			}
+
+		});
+		myStage.setScene(myScene);
+		myStage.show();
+	}
+
+	private void drawPlayersOnBoard(GraphicsContext gc, int lines, int columns, int ratio) {
+		for(Player player : players){
+			updatePlayerPositionStage(player);
+		}
+	}
+
+	private void setFillColorByPlayer(GraphicsContext gc, Player player) {
+		switch(player.getCurrentColor().name()){
+		case "RED":
+			gc.setFill(Color.RED);
+			break;
+		case "BLUE":
+			gc.setFill(Color.BLUE);
+			break;
+		case "YELLOW":
+			gc.setFill(Color.YELLOW);
+			break;
+		case "GREEN":
+			gc.setFill(Color.GREEN);
+			break;
+		}
+	}
+
+	private void drawBoardCells(GraphicsContext gc, int lines, int columns, int ratio) {
+		int i, j;
+		for (i = 0; i < lines; i++) {
+			for (j = 0; j < columns; j++) {
+				gc.strokeRect(i * ratio, j * ratio, ratio, ratio);
+			}
+		}
+	}
+
+	public void keyPressed(KeyEvent e) {
+		KeyCode keyCode = e.getCode();
+	    switch( keyCode ) {
+	        case UP:
+	            movePlayer(0, Direction.LEFT); 
+	            break;
+	        case DOWN:
+	        	movePlayer(0, Direction.RIGHT);  
+	            break;
+	        case LEFT:
+	        	movePlayer(0, Direction.DOWN); 
+	            break;
+	        case RIGHT :
+	        	movePlayer(0, Direction.UP);
+	            break;
+	     }
+	}
+
+	private void updatePlayerPositionStage(Player p) {
+		GraphicsContext gc = myCanvas.getGraphicsContext2D();
+		Group group = new Group();
+		
+		setFillColorByPlayer(gc, p);
+		
+		gc.fillRect(p.getCurrentPosition().getLine() * RATIO,
+				p.getCurrentPosition().getColumn() * RATIO, RATIO, RATIO);
+		
+		group.getChildren().add(myCanvas);
+
+		updateMyStage(group, myBoard.getTotalLines()*RATIO, myBoard.getTotalColumns()*RATIO);
+		
 	}
 
 }
