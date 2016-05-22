@@ -90,6 +90,14 @@ public class Match {
 		return this.id;
 	}
 
+	public Canvas getCanvas(){
+		return myCanvas;
+	}
+	
+	public int getRATIO(){
+		return RATIO;
+	}
+	
 	public MatchState getState() {
 		return this.state;
 	}
@@ -198,7 +206,10 @@ public class Match {
 	private void distributePlayersPositions() {
 		int i;
 		for (i = 0; i < players.size(); i++) {
-			players.get(i).setCurrentPosition(BoardPositions.values()[i].toCell(myBoard));
+			Cell cell = BoardPositions.values()[i].toCell(myBoard);
+			Player player = players.get(i);
+			player.setCurrentPosition(cell);
+			player.addCellToPath(cell);
 		}
 	}
 
@@ -284,7 +295,7 @@ public class Match {
 		}
 	}
 
-	private void setFillColorByPlayer(GraphicsContext gc, Player player) {
+	public void setFillColorByPlayer(GraphicsContext gc, Player player) {
 		switch(player.getCurrentColor().name()){
 		case "RED":
 			gc.setFill(Color.RED);
@@ -302,11 +313,8 @@ public class Match {
 	}
 
 	private void drawBoardCells(GraphicsContext gc, int lines, int columns, int ratio) {
-		int i, j;
-		for (i = 0; i < lines; i++) {
-			for (j = 0; j < columns; j++) {
-				gc.strokeRect(i * ratio, j * ratio, ratio, ratio);
-			}
+		for(Cell cell : myBoard.getBoardCells()){
+			cell.draw(gc,ratio);
 		}
 	}
 
@@ -333,12 +341,9 @@ public class Match {
 		Group group = new Group();
 		
 		setFillColorByPlayer(gc, p);
-		
-		gc.fillRect(p.getCurrentPosition().getLine() * RATIO,
-				p.getCurrentPosition().getColumn() * RATIO, RATIO, RATIO);
-		
+		p.getCurrentPosition().fill(gc, RATIO);
+		p.draw(gc,RATIO);
 		group.getChildren().add(myCanvas);
-
 		updateMyStage(group, myBoard.getTotalLines()*RATIO, myBoard.getTotalColumns()*RATIO);
 		
 	}

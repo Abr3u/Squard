@@ -1,20 +1,11 @@
 package domain;
 
-import org.junit.validator.PublicClassValidator;
-
 import exceptions.InvalidCellCoordinatesException;
 import exceptions.InvalidPlayerIdException;
 import javafx.application.Application;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Squard extends Application {
@@ -31,13 +22,7 @@ public class Squard extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
-		
-		primaryStage.setTitle("Squard");
-        Group root = new Group();
-        Scene scene = new Scene(root, 300, 250, Color.LIGHTGREEN);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        
+	
         MatchManager matchManager = new MatchManager();
 
         Player abreu = null;
